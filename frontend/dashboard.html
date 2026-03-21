@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | AcadMate</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-graduation-cap"></i> AcadMate
+                </a>
+                <div class="nav-links">
+                    <span id="userName" style="font-weight: 600; color: var(--primary);"></span>
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-right: 1rem;">
+                        <button onclick="showChatList()" class="nav-icon-btn" title="Chats">
+                            <i class="fas fa-comment-alt"></i>
+                            <span id="chatBadge" class="nav-badge" style="display: none;"></span>
+                        </button>
+                        <div style="position: relative;">
+                            <button onclick="toggleNotifications()" class="nav-icon-btn" title="Notifications">
+                                <i class="fas fa-bell"></i>
+                                <span id="notifBadge" class="nav-badge" style="display: none;"></span>
+                            </button>
+                            <div id="notificationPanel" class="notification-panel">
+                                <div class="notification-panel-header">
+                                    <h4>Notifications</h4>
+                                    <button class="mark-all-read-btn" onclick="markAllRead()">Mark all read</button>
+                                </div>
+                                <div class="notification-panel-body" id="notifList">
+                                    <p style="text-align: center; color: var(--secondary); padding: 2rem;">No notifications</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="logout()" class="btn btn-outline" style="padding: 0.4rem 1rem;">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 120px;">
+        <!-- Student Dashboard -->
+        <div id="studentDashboard" style="display: none;">
+            
+            <!-- Welcome Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h2>Welcome back, <span id="studentGreetingName">Student</span> 👋</h2>
+                    <p style="color: var(--secondary);">Here's what's happening with your assignments today.</p>
+                </div>
+            </div>
+
+            <!-- Top Dashboard Stats -->
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-file-alt" style="color: var(--primary); margin-right: 0.5rem;"></i>Total Requests</h3>
+                    <p id="studentStatTotal" style="font-size: 1.8rem; font-weight: 700; color: var(--text-dark);">0</p>
+                </div>
+                <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i>Completed</h3>
+                    <p id="studentStatCompleted" style="font-size: 1.8rem; font-weight: 700; color: var(--text-dark);">0</p>
+                </div>
+                <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-hourglass-half" style="color: #f59e0b; margin-right: 0.5rem;"></i>Ongoing</h3>
+                    <p id="studentStatOngoing" style="font-size: 1.8rem; font-weight: 700; color: var(--text-dark);">0</p>
+                </div>
+                <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-wallet" style="color: #8b5cf6; margin-right: 0.5rem;"></i>Total Spent</h3>
+                    <p id="studentStatSpent" style="font-size: 1.8rem; font-weight: 700; color: var(--text-dark);">₹0</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Quick Actions</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button onclick="showRequestModal()" class="btn btn-primary" style="flex: 1; min-width: 200px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem;">
+                        <i class="fas fa-plus"></i> Post New Request
+                    </button>
+                    <button class="btn btn-outline" style="flex: 1; min-width: 200px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem;">
+                        <i class="fas fa-search"></i> Browse Helpers
+                    </button>
+                    <button class="btn btn-outline" style="flex: 1; min-width: 200px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem; color: #9ca3af; border-color: #e5e7eb; background-color: #f9fafb; cursor: not-allowed;" disabled title="Coming Soon">
+                        <i class="fas fa-book"></i> Notes Marketplace
+                    </button>
+                    <button class="btn btn-outline" style="flex: 1; min-width: 200px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem; color: #9ca3af; border-color: #e5e7eb; background-color: #f9fafb; cursor: not-allowed;" disabled title="Coming Soon">
+                        <i class="fas fa-bolt"></i> Instant Doubt Help
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Requests Area -->
+            <div style="margin-top: 3rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2>Active Requests</h2>
+                    <a href="#history" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 600;">View History</a>
+                </div>
+                
+                <div id="studentRequests" class="feature-grid" style="margin-top: 0;">
+                    <!-- Requests will be injected here -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="studentRequestsEmpty" style="display: none; text-align: center; padding: 4rem 2rem; background: white; border-radius: 12px; border: 1px dashed var(--border);">
+                    <i class="fas fa-rocket" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--text-dark); margin-bottom: 0.5rem;">No active requests yet</h3>
+                    <p style="color: var(--secondary); margin-bottom: 1.5rem;">Post your first assignment and get help in minutes 🚀</p>
+                    <button onclick="showRequestModal()" class="btn btn-primary">Post New Request</button>
+                </div>
+            </div>
+            
+            <div id="history" style="margin-top: 4rem;">
+                <h2>Booking History</h2>
+                <div id="studentHistory" class="feature-grid" style="grid-template-columns: 1fr; margin-top: 1rem;">
+                    <!-- History will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Helper Dashboard -->
+        <div id="helperDashboard" style="display: none;">
+            
+            <!-- Welcome Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h2>Welcome back, <span id="helperGreetingName">Helper</span> 👋</h2>
+                    <p style="color: var(--secondary);">Find new tasks and track your earnings.</p>
+                </div>
+            </div>
+
+            <!-- Top Dashboard Stats -->
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-file-alt" style="color: var(--primary); margin-right: 0.5rem;"></i>Total Tasks</h3>
+                    <p id="helperStatTotal" style="font-size: 1.8rem; font-weight: 700; color: var(--text-dark);">0</p>
+                </div>
+                <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: #10b981; margin-right: 0.5rem;"></i>Completed</h3>
+                    <p id="helperStatCompleted" style="font-size: 1.8rem; font-weight: 700; color: var(--text-dark);">0</p>
+                </div>
+                <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-hourglass-half" style="color: #f59e0b; margin-right: 0.5rem;"></i>Ongoing</h3>
+                    <p id="helperStatOngoing" style="font-size: 1.8rem; font-weight: 700; color: var(--text-dark);">0</p>
+                </div>
+                <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                    <h3 style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-rupee-sign" style="color: #8b5cf6; margin-right: 0.5rem;"></i>Earned</h3>
+                    <p id="helperStatEarned" style="font-size: 1.8rem; font-weight: 700; color: var(--text-dark);">₹0</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h2>Available Requests</h2>
+                <div style="margin-top: 1rem;">
+                    <input type="text" id="subjectFilter" class="form-input" placeholder="Filter by subject..."
+                        style="max-width: 300px;">
+                </div>
+            </div>
+            
+            <div id="availableRequests" class="feature-grid">
+                <!-- Available requests will be injected here -->
+            </div>
+            
+            <div id="helperRequestsEmpty" style="display: none; text-align: center; padding: 4rem 2rem; background: white; border-radius: 12px; border: 1px dashed var(--border); margin-top: 2rem;">
+                <i class="fas fa-search" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                <h3 style="color: var(--text-dark); margin-bottom: 0.5rem;">No requests available</h3>
+                <p style="color: var(--secondary); margin-bottom: 1.5rem;">Check back later for new helping opportunities 📚</p>
+            </div>
+
+            <div style="margin-top: 4rem;">
+                <h2>My History</h2>
+                <div id="helperHistory" class="feature-grid" style="grid-template-columns: 1fr;">
+                    <!-- History will be injected here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Request Modal -->
+    <div id="requestModal" class="modal-overlay">
+        <div class="auth-card" style="max-width: 600px;">
+            <h3>Post a New Request</h3>
+            <form id="requestForm">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="reqTitle" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <input type="text" id="reqSubject" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="reqDesc" class="form-input" style="height: 100px;" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Deadline</label>
+                    <input type="datetime-local" id="reqDeadline" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Attachments (PDF, Images, Docs)</label>
+                    <input type="file" id="reqFiles" class="form-input" multiple>
+                    <small style="color: var(--secondary);">You can upload multiple files.</small>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; margin-bottom: 1rem; padding: 0.5rem; border-radius: 8px; background: #fff1f2; border: 1px dashed #fda4af;">
+                    <input type="checkbox" id="reqUrgentPrint" style="width: auto; height: 18px; width: 18px;">
+                    <label for="reqUrgentPrint" style="margin: 0; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #e11d48;"><i class="fas fa-print"></i> Require Urgent Print</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Request</button>
+                <button type="button" onclick="hideRequestModal()" class="btn btn-outline"
+                    style="width: 100%; margin-top: 1rem;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chat List Modal -->
+    <div id="chatListModal" class="modal-overlay">
+        <div class="auth-card" style="max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-comments"></i> All Chats</h3>
+                <button onclick="hideChatList()" class="btn btn-outline"
+                    style="padding: 0.2rem 0.5rem;">&times;</button>
+            </div>
+            <div id="chatListContent">
+                <p style="color: var(--secondary); text-align: center;">No active chats found.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="modal-overlay">
+        <div class="auth-card"
+            style="max-width: 800px; width: 90%; height: 80vh; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 id="chatTitle">Chat</h3>
+                <button onclick="hideChatModal()" class="btn btn-outline"
+                    style="padding: 0.2rem 0.5rem;">&times;</button>
+            </div>
+            <div id="messageList"
+                style="flex: 1; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background: #fff;">
+                <!-- Messages will be injected here -->
+            </div>
+            <div id="chatFilePreview" class="chat-file-preview" style="display: none;">
+                <div class="chat-file-preview-inner">
+                    <i class="fas fa-file"></i>
+                    <span id="chatFileName"></span>
+                    <button type="button" id="chatFileRemove" class="chat-file-remove" title="Remove file">&times;</button>
+                </div>
+            </div>
+            <form id="chatForm" style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="file" id="chatFileInput" accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.doc,.docx,.txt,.ppt,.pptx,.xls,.xlsx" style="display: none;">
+                <button type="button" id="chatAttachBtn" class="chat-attach-btn" title="Attach file">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <input type="text" id="chatInput" class="form-input" placeholder="Type your message..." style="flex: 1;">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Marketplace Modal -->
+    <div id="marketplaceModal" class="modal-overlay">
+        <div class="auth-card" style="max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-store"></i> Notes Marketplace</h3>
+                <button onclick="hideMarketplaceModal()" class="btn btn-outline" style="padding: 0.2rem 0.5rem;">&times;</button>
+            </div>
+            <div id="marketplaceList" class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <p style="color: var(--secondary); text-align: center; grid-column: 1/-1;">Loading marketplace items...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
